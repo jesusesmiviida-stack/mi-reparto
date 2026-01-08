@@ -5,44 +5,205 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Reparto Hub Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="pb-20">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
 
-    <header class="glass-header px-6 py-4 mb-6">
-        <div class="max-w-md mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <img src="logo.png.png" alt="L" class="w-12 h-12 rounded-2xl bg-slate-100 object-cover border border-slate-200 shadow-sm">
-                <div>
-                    <h1 class="font-extrabold text-slate-900 text-lg leading-tight">Ruta de Hoy</h1>
-                    <div id="gps-indicator" class="flex items-center gap-1.5">
-                        <div id="gps-dot" class="w-2.5 h-2.5 bg-slate-300 rounded-full transition-colors duration-500"></div>
-                        <p id="gps-text" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Buscando GPS</p>
-                    </div>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            margin: 0;
+            color: #1e293b;
+            padding-bottom: 40px;
+        }
+
+        .header-app {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* TARJETAS: Esto es lo que faltaba en tu foto */
+        .cliente-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+        }
+
+        .btn-action {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Colores de botones */
+        .btn-check { background: #f1f5f9; color: #94a3b8; }
+        .btn-check.active { background: #dcfce7; color: #16a34a; }
+        .btn-maps { background: #eff6ff; color: #2563eb; margin: 0 8px; }
+        .btn-wa { background: #f0fdf4; color: #16a34a; }
+
+        .llegada-anim {
+            border: 2px solid #3b82f6;
+            background-color: #eff6ff;
+            animation: pulse-bg 2s infinite;
+        }
+
+        @keyframes pulse-bg {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        #progress-bar {
+            height: 6px;
+            background: #2563eb;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-app">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="logo.png" style="width: 48px; height: 48px; border-radius: 12px; border: 1px solid #eee;">
+            <div>
+                <h1 style="font-weight: 800; font-size: 18px; margin: 0;">Ruta de Hoy</h1>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <div id="gps-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #cbd5e1;"></div>
+                    <span id="gps-text" style="font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Buscando GPS</span>
                 </div>
             </div>
-            <div class="text-right">
-                <p id="status" class="text-sm font-black text-blue-600">0/0</p>
-                <div class="w-16 bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden ml-auto">
-                    <div id="progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-700"></div>
-                </div>
+        </div>
+        <div style="text-align: right;">
+            <span id="status" style="font-weight: 800; color: #2563eb;">0/0</span>
+            <div style="width: 60px; height: 6px; background: #f1f5f9; border-radius: 10px; margin-top: 4px;">
+                <div id="progress-bar" style="width: 0%;"></div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-md mx-auto px-5">
-        <div id="lista-entregas"></div>
+    <main id="lista-entregas" style="max-width: 500px; margin: 0 auto;"></main>
 
-        <button onclick="reiniciarRuta()" class="w-full mt-12 py-4 bg-white text-slate-400 rounded-2xl font-bold text-[10px] tracking-[0.2em] border border-slate-100 uppercase shadow-sm active:bg-slate-50 transition-colors">
-            Reiniciar Jornada
+    <div style="padding: 20px 16px;">
+        <button onclick="reiniciarRuta()" style="width: 100%; padding: 16px; background: white; border: 1px solid #e2e8f0; border-radius: 16px; color: #94a3b8; font-weight: 700; font-size: 12px; letter-spacing: 1px;">
+            REINICIAR JORNADA
         </button>
-        
-        <p class="text-center text-[9px] text-slate-300 font-bold uppercase tracking-[0.3em] mt-8 pb-10">
-            Smart Logistics System v3.0
-        </p>
-    </main>
+    </div>
 
-    <script src="script.js"></script>
+    <script>
+        const rutas = {
+            "YO": [ 
+                { nombre: "MI CASA", lat: -34.763602, lon: -56.243176, tel: "099000000" },
+                { nombre: "Super La Paz", lat: -34.7621, lon: -56.2234, tel: "099123456" },
+                { nombre: "Cementerio La Paz", lat: -34.7522039, lon: -56.2288156, tel: "23622619" },
+                { nombre: "Planta Sarubbi", lat: -34.8052, lon: -56.2411, tel: "098765432" }
+            ]
+        };
+
+        let usuarioActivo = "YO";
+        let entregados = JSON.parse(localStorage.getItem(`entregas_${usuarioActivo}`)) || [];
+        let miUbicacion = { lat: 0, lon: 0 };
+        let clientesAlertados = [];
+
+        const sonidoAlerta = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+
+        function marcarEntrega(nombre) {
+            if (!entregados.includes(nombre)) {
+                if(navigator.vibrate) navigator.vibrate(50);
+                entregados.push(nombre);
+                localStorage.setItem(`entregas_${usuarioActivo}`, JSON.stringify(entregados));
+                actualizarPantalla();
+            }
+        }
+
+        function reiniciarRuta() {
+            if (confirm("¿Limpiar lista?")) {
+                entregados = [];
+                localStorage.setItem(`entregas_${usuarioActivo}`, JSON.stringify(entregados));
+                location.reload();
+            }
+        }
+
+        function calcularDistancia(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2-lat1) * Math.PI/180;
+            const dLon = (lon2-lon1) * Math.PI/180;
+            const a = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        function actualizarPantalla() {
+            const lista = document.getElementById('lista-entregas');
+            const total = rutas[usuarioActivo].length;
+            
+            document.getElementById('status').innerText = `${entregados.length}/${total}`;
+            document.getElementById('progress-bar').style.width = `${(entregados.length/total)*100}%`;
+
+            const listaOrdenada = [...rutas[usuarioActivo]].sort((a,b) => entregados.includes(a.nombre) - entregados.includes(b.nombre));
+
+            lista.innerHTML = '';
+            listaOrdenada.forEach(c => {
+                const d = calcularDistancia(miUbicacion.lat, miUbicacion.lon, c.lat, c.lon);
+                const esEntregado = entregados.includes(c.nombre);
+                const cerca = d < 0.20 && !esEntregado;
+
+                if (cerca && !clientesAlertados.includes(c.nombre)) {
+                    if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                    sonidoAlerta.play().catch(()=>{});
+                    clientesAlertados.push(c.nombre);
+                }
+
+                lista.innerHTML += `
+                    <div class="cliente-card ${esEntregado ? 'opacity-40' : (cerca ? 'llegada-anim' : '')}">
+                        <div style="flex: 1;">
+                            <h3 style="font-weight: 700; font-size: 16px; margin: 0;">${c.nombre}</h3>
+                            <p style="font-size: 11px; font-weight: 700; margin-top: 4px; color: ${cerca ? '#2563eb' : '#94a3b8'}">
+                                ${esEntregado ? '✓ ENTREGADO' : (cerca ? '📍 ¡LLEGANDO!' : d.toFixed(2) + ' km')}
+                            </p>
+                        </div>
+                        <div style="display: flex;">
+                            <button onclick="marcarEntrega('${c.nombre}')" class="btn-action btn-check ${esEntregado ? 'active' : ''}">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+                            </button>
+                            <a href="https://www.google.com/maps?q=${c.lat},${c.lon}" target="_blank" class="btn-action btn-maps">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                            </a>
+                            <a href="https://wa.me/${c.tel}" target="_blank" class="btn-action btn-wa">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.55 4.12 1.51 5.861L0 24l6.337-1.631C8.03 23.361 9.94 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        navigator.geolocation.watchPosition(pos => {
+            miUbicacion.lat = pos.coords.latitude;
+            miUbicacion.lon = pos.coords.longitude;
+            document.getElementById('gps-dot').style.background = '#10b981';
+            document.getElementById('gps-text').innerText = "En vivo";
+            actualizarPantalla();
+        }, null, { enableHighAccuracy: true });
+
+        actualizarPantalla();
+    </script>
 </body>
 </html>
-
