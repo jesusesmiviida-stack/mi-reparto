@@ -1,94 +1,60 @@
-// 1. BASE DE DATOS DE ENTREGAS
 let entregas = [
     { id: 1, nombre: "Super La Paz", lat: -34.7619729, lng: -56.2283198, finalizado: false },
-    { id: 2, nombre: "Farmacia Sol", lat: -34.6100, lng: -58.4000, finalizado: false },
-    { id: 3, nombre: "Supermercado Luna", lat: -34.5900, lng: -58.3700, finalizado: false }
+    { id: 2, nombre: "Cliente de Prueba", lat: -34.6037, lng: -58.3816, finalizado: false }
 ];
 
-// 2. MONITOR DE UBICACIÓN
-function iniciarSeguimiento() {
-    if (!navigator.geolocation) {
-        alert("Tu navegador no soporta GPS");
-        return;
+function iniciarApp() {
+    // 1. Dibujar la lista de inmediato
+    dibujarInterfaz();
+    
+    // 2. Intentar obtener el GPS
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(pos => {
+            const miLat = pos.coords.latitude;
+            const miLng = pos.coords.longitude;
+            document.getElementById('status').innerText = `📡 GPS Activo`;
+            actualizarDistancias(miLat, miLng);
+        }, error => {
+            document.getElementById('status').innerText = "❌ Error GPS: Activa tu ubicación";
+        }, { enableHighAccuracy: true });
     }
-
-    navigator.geolocation.watchPosition(pos => {
-        const miLat = pos.coords.latitude;
-        const miLng = pos.coords.longitude;
-        
-        document.getElementById('status').innerText = `📡 GPS Activo: ${miLat.toFixed(4)}, ${miLng.toFixed(4)}`;
-
-        verificarDistancias(miLat, miLng);
-    }, error => {
-        console.error(error);
-        document.getElementById('status').innerText = "❌ Error al obtener GPS";
-    }, {
-        enableHighAccuracy: true
-    });
 }
 
-// 3. LÓGICA DE CIERRE AUTOMÁTICO
-function verificarDistancias(miLat, miLng) {
+function actualizarDistancias(miLat, miLng) {
     entregas.forEach(e => {
         if (!e.finalizado) {
             e.distancia = calcularKM(miLat, miLng, e.lat, e.lng);
-            
-            // Si estás a menos de 50 metros (0.05 km), finaliza solo
-            if (e.distancia < 0.05) {
-                e.finalizado = true;
-                notificarEntrega(e.nombre);
-            }
+            if (e.distancia < 0.05) e.finalizado = true;
         }
     });
-
-    // Reordenar: Primero las pendientes por cercanía, luego las finalizadas
     entregas.sort((a, b) => a.finalizado - b.finalizado || a.distancia - b.distancia);
     dibujarInterfaz();
 }
 
-// 4. CÁLCULO MATEMÁTICO (Fórmula Haversine)
 function calcularKM(lat1, lon1, lat2, lon2) {
-    const R = 6371; 
+    const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
     return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
 }
 
-// 5. RENDERIZADO DE TARJETAS
 function dibujarInterfaz() {
     const lista = document.getElementById('lista-entregas');
     lista.innerHTML = '';
-    
     entregas.forEach(e => {
-        const div = document.createElement('div');
-        div.className = `card-entrega p-4 border-2 rounded-2xl bg-white shadow-sm ${e.finalizado ? 'entrega-finalizada' : 'border-blue-100'}`;
-        
-        div.innerHTML = `
-            <div class="flex justify-between items-center">
-                <div>
-                    <h3 class="font-bold text-slate-700">${e.nombre}</h3>
-                    <p class="text-xs text-gray-400 font-mono">${e.lat}, ${e.lng}</p>
+        const distText = e.distancia ? `${e.distancia.toFixed(2)} km` : '-- km';
+        lista.innerHTML += `
+            <div class="p-4 border-2 rounded-2xl mb-2 ${e.finalizado ? 'bg-green-50 border-green-500' : 'bg-white border-blue-100'}">
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-slate-700">${e.nombre}</span>
+                    <span class="font-black text-blue-600">${e.finalizado ? '✓ OK' : distText}</span>
                 </div>
-                <div class="text-right">
-                    <span class="text-sm font-black ${e.finalizado ? 'text-green-600' : 'text-blue-600'}">
-                        ${e.finalizado ? '✓ OK' : e.distancia.toFixed(2) + ' km'}
-                    </span>
-                </div>
-            </div>
-        `;
-        lista.appendChild(div);
+            </div>`;
     });
 }
 
-function notificarEntrega(nombre) {
-    // Aquí puedes añadir un sonido o vibración
-    if ("vibrate" in navigator) navigator.vibrate(200);
-    console.log(`Entrega completada en: ${nombre}`);
-}
-dibujarInterfaz();
-
-iniciarSeguimiento();
+// Arrancar la app
+iniciarApp();
 
 
