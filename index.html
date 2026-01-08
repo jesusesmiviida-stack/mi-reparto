@@ -7,56 +7,64 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        /* DISEÑO DIRECTO AQUÍ PARA QUE NO FALLE */
-        body {
-            background-color: #f1f5f9;
-            background-image: 
-                radial-gradient(#cbd5e1 0.8px, transparent 0.8px),
-                linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            background-size: 24px 24px, 100% 100%;
-            background-attachment: fixed;
-            margin: 0;
-            padding: 16px;
-            min-height: 100vh;
-            font-family: sans-serif;
+        /* ESTO FUERZA EL FONDO SÍ O SÍ */
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            min-height: 100vh !important;
+            /* Degradado de fondo */
+            background: #f1f5f9 linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%) no-repeat fixed !important;
+        }
+
+        /* CAPA PARA LOS PUNTITOS */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#94a3b8 0.8px, transparent 0.8px);
+            background-size: 24px 24px;
+            z-index: -1; /* Se queda atrás de todo */
+            pointer-events: none;
         }
 
         .glass {
-            background: rgba(255, 255, 255, 0.7) !important;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            background: rgba(255, 255, 255, 0.75) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
         }
 
         .cliente-card {
-            animation: fadeIn 0.5s ease-out forwards;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
-<body>
-    <div class="max-w-md mx-auto">
+<body class="p-4">
+    <div class="max-w-md mx-auto relative z-10">
         <header class="flex flex-col items-center mb-6 text-center">
-            <img src="logo.png.png" alt="Logo" class="w-24 h-24 rounded-full shadow-2xl mb-4 border-4 border-white object-cover">
+            <img src="logo.png" alt="Logo" class="w-24 h-24 rounded-full shadow-2xl mb-4 border-4 border-white object-cover bg-white">
             
-            <div id="gps-indicator" class="glass flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full shadow-sm">
-                <span id="gps-dot" class="w-2.5 h-2.5 bg-gray-400 rounded-full transition-colors duration-500"></span>
+            <div id="gps-indicator" class="glass flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full">
+                <span id="gps-dot" class="w-2.5 h-2.5 bg-gray-400 rounded-full"></span>
                 <span id="gps-text" class="text-[10px] font-bold text-slate-500 tracking-widest uppercase">Buscando Señal</span>
             </div>
 
-            <div class="w-full bg-slate-200/50 rounded-full h-4 shadow-inner border border-white/40 overflow-hidden mb-2">
+            <div class="w-full bg-slate-300/50 rounded-full h-4 shadow-inner border border-white/40 overflow-hidden mb-2">
                 <div id="progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-700"></div>
             </div>
-            <div id="status" class="text-[10px] font-black text-slate-400 tracking-widest uppercase text-center">Cargando...</div>
+            <div id="status" class="text-[10px] font-black text-slate-500 tracking-widest uppercase">Cargando...</div>
         </header>
         
         <div id="lista-entregas" class="space-y-4"></div>
 
-        <button onclick="reiniciarRuta()" class="w-full mt-12 mb-10 py-4 bg-slate-900 text-white rounded-2xl font-black shadow-2xl uppercase tracking-widest text-sm border-b-4 border-black active:scale-95 transition-all">
+        <button onclick="reiniciarRuta()" class="w-full mt-12 mb-10 py-4 bg-slate-900 text-white rounded-2xl font-black shadow-2xl uppercase tracking-widest text-sm border-b-4 border-black">
             Reiniciar Ruta para Mañana
         </button>
     </div>
@@ -64,4 +72,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
