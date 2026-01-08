@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Reparto - Pro</title>
-    <link rel="icon" type="image/png" href="logo.png.png">
+    <link rel="icon" type="image/png" href="logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .progress-transition { transition: width 0.5s ease-in-out; }
-    </style>
 </head>
 <body class="bg-slate-100 p-4">
     <div class="max-w-md mx-auto">
-        
         <header class="flex flex-col items-center mb-6 text-center">
-            <img src="logo.png.png" alt="Logo" class="w-24 h-24 rounded-full shadow-lg mb-4 border-4 border-white object-cover">
+            <img src="logo.png" alt="Logo" class="w-24 h-24 rounded-full shadow-lg mb-4 border-4 border-white object-cover">
             
             <div id="gps-indicator" class="flex items-center gap-2 mb-4 bg-white px-3 py-1 rounded-full shadow-sm border border-slate-200">
                 <span id="gps-dot" class="w-2.5 h-2.5 bg-gray-400 rounded-full transition-colors duration-500"></span>
@@ -22,7 +18,7 @@
             </div>
 
             <div class="w-full bg-white rounded-full h-4 shadow-inner border border-slate-200 overflow-hidden mb-2">
-                <div id="progress-bar" class="bg-blue-600 h-full w-0 progress-transition shadow-[0_0_10px_rgba(37,99,235,0.4)]"></div>
+                <div id="progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-500 shadow-[0_0_10px_rgba(37,99,235,0.4)]"></div>
             </div>
             <div id="status" class="text-xs font-black text-slate-500 tracking-tighter uppercase">Cargando...</div>
         </header>
@@ -36,4 +32,6 @@
     <script src="script.js"></script>
 </body>
 </html>
+</html>
+
 
