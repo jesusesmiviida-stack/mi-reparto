@@ -12,7 +12,8 @@ let entregados = JSON.parse(localStorage.getItem(`entregas_${usuarioActivo}`)) |
 let miUbicacion = { lat: 0, lon: 0 };
 let clientesAlertados = [];
 
-const sonidoAlerta = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1154-fountain-filled.mp3');
+// URL de sonido actualizada (la anterior a veces da error de carga directa)
+const sonidoAlerta = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
 
 function vibrar(p) { if(navigator.vibrate) navigator.vibrate(p); }
 
@@ -47,8 +48,11 @@ function actualizarPantalla() {
     if(!lista) return;
 
     const total = rutas[usuarioActivo].length;
-    document.getElementById('status').innerText = `${entregados.length}/${total}`;
-    document.getElementById('progress-bar').style.width = `${(entregados.length/total)*100}%`;
+    const statusEl = document.getElementById('status');
+    const progressEl = document.getElementById('progress-bar');
+    
+    if(statusEl) statusEl.innerText = `${entregados.length}/${total}`;
+    if(progressEl) progressEl.style.width = `${(entregados.length/total)*100}%`;
 
     const listaOrdenada = [...rutas[usuarioActivo]].sort((a,b) => entregados.includes(a.nombre) - entregados.includes(b.nombre));
 
@@ -64,6 +68,7 @@ function actualizarPantalla() {
             clientesAlertados.push(c.nombre);
         }
 
+        // CORRECCIÓN EN EL ENLACE DE MAPS: Se cambió el 0{c.lat} por ${c.lat}
         lista.innerHTML += `
             <div class="cliente-card ${esEntregado ? 'opacity-40 grayscale' : (cerca ? 'llegada-anim' : '')}">
                 <div class="flex-1 pr-4 text-left">
