@@ -1,4 +1,3 @@
-/* 1. FONDO CON TEXTURA Y DEGRADADO */
 body {
     background-color: #f1f5f9;
     background-image: 
@@ -12,8 +11,6 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* 2. EFECTO DE VIDRIO (Glassmorphism) */
-/* Esto hace que el indicador GPS y la barra de progreso se vean modernos */
 .glass {
     background: rgba(255, 255, 255, 0.7) !important;
     backdrop-filter: blur(10px);
@@ -21,8 +18,6 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-/* 3. ANIMACIÓN DE LAS TARJETAS */
-/* Hace que los clientes aparezcan suavemente al cargar */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -32,11 +27,10 @@ body {
     animation: fadeIn 0.5s ease-out forwards;
 }
 
-/* 4. AJUSTE PARA BOTONES Y SOMBRAS */
 button:active {
     transform: scale(0.96);
 }
-
 .shadow-xl {
     shadow-color: rgba(0, 0, 0, 0.1);
 }
+
