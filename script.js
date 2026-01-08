@@ -1,41 +1,43 @@
-// LISTA DE CLIENTES (Tu casa es el primero ahora)
 const clientes = [
-    { nombre: "MI CASA", lat: -34.763602, lon: -56.243176, tel: "+59897919036" }, // Cambia el tel si quieres
+    { nombre: "MI CASA", lat: -34.763602, lon: -56.243176, tel: "099000000" },
     { nombre: "Super La Paz", lat: -34.7621, lon: -56.2234, tel: "099123456" },
     { nombre: "Planta Industrial Sarubbi", lat: -34.8052, lon: -56.2411, tel: "098765432" }
 ];
 
+// Configuración de Sonidos usando librerías estándar del navegador
+const sonidoCheck = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
+const sonidoAlerta = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+
 let entregados = JSON.parse(localStorage.getItem('entregas_realizadas')) || [];
 let miUbicacion = { lat: 0, lon: 0 };
+let clientesAlertados = []; // Para que el sonido de "llegada" solo suene una vez por cliente
 
-const gpsOpciones = {
-    enableHighAccuracy: true,
-    maximumAge: 0,
-    timeout: 15000
-};
+const gpsOpciones = { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 };
 
 function calcularDistancia(lat1, lon1, lat2, lon2) {
-    if (lat1 === 0) return "...";
+    if (lat1 === 0) return 999;
     const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
     const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
               Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
               Math.sin(dLon/2) * Math.sin(dLon/2);
-    return (R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))).toFixed(2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
 function marcarEntrega(nombre) {
     if (!entregados.includes(nombre)) {
         entregados.push(nombre);
         localStorage.setItem('entregas_realizadas', JSON.stringify(entregados));
+        sonidoCheck.play().catch(e => console.log("Audio bloqueado, toca la pantalla"));
         actualizarPantalla();
     }
 }
 
 function reiniciarRuta() {
-    if (confirm("¿Quieres limpiar las entregas y empezar de cero?")) {
+    if (confirm("¿Quieres limpiar las entregas?")) {
         entregados = [];
+        clientesAlertados = [];
         localStorage.setItem('entregas_realizadas', JSON.stringify(entregados));
         actualizarPantalla();
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -57,18 +59,24 @@ function actualizarPantalla() {
 
     lista.innerHTML = '';
     listaOrdenada.forEach(c => {
-        const dist = calcularDistancia(miUbicacion.lat, miUbicacion.lon, c.lat, c.lon);
+        const d = calcularDistancia(miUbicacion.lat, miUbicacion.lon, c.lat, c.lon);
+        const distTxt = d.toFixed(2);
         const esEntregado = entregados.includes(c.nombre);
+
+        // LÓGICA DE SONIDO DE PROXIMIDAD (200 metros)
+        if (!esEntregado && d < 0.20 && !clientesAlertados.includes(c.nombre)) {
+            sonidoAlerta.play().catch(e => console.log("Audio bloqueado"));
+            clientesAlertados.push(c.nombre);
+        }
         
-        // Enlace corregido para abrir la aplicación de mapas
         const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lon}`;
         
         lista.innerHTML += `
-            <div class="${esEntregado ? 'bg-gray-200 opacity-60' : 'bg-white'} p-4 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center transition-all">
+            <div class="${esEntregado ? 'bg-gray-200 opacity-60' : (d < 0.20 ? 'bg-yellow-50 border-yellow-400' : 'bg-white')} p-4 rounded-2xl shadow-sm border flex justify-between items-center transition-all">
                 <div class="flex-1">
                     <h3 class="font-bold text-slate-800">${c.nombre}</h3>
                     <p class="${esEntregado ? 'text-gray-500' : 'text-blue-600'} text-xs font-bold uppercase tracking-wider">
-                        ${esEntregado ? 'Completado ✓' : dist + ' km'}
+                        ${esEntregado ? 'Completado ✓' : distTxt + ' km'}
                     </p>
                 </div>
                 <div class="flex gap-3">
@@ -98,4 +106,5 @@ navigator.geolocation.watchPosition(pos => {
     const txt = document.getElementById('gps-text');
     dot.className = "w-2.5 h-2.5 bg-red-500 rounded-full";
     txt.innerText = "Sin Señal GPS";
-}, gpsOpciones);
+}, gpsOpciones);;
+
