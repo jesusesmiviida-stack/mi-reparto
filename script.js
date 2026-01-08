@@ -4,13 +4,17 @@ const clientes = [
     { nombre: "Planta Industrial Sarubbi", lat: -34.8052, lon: -56.2411, tel: "098765432" }
 ];
 
-// Configuración de Sonidos usando librerías estándar del navegador
-const sonidoCheck = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
-const sonidoAlerta = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+// SONIDOS MÁS FUERTES Y CLAROS
+const sonidoCheck = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3');
+const sonidoAlerta = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1154-fountain-filled.mp3');
+
+// Forzar volumen máximo
+sonidoCheck.volume = 1.0;
+sonidoAlerta.volume = 1.0;
 
 let entregados = JSON.parse(localStorage.getItem('entregas_realizadas')) || [];
 let miUbicacion = { lat: 0, lon: 0 };
-let clientesAlertados = []; // Para que el sonido de "llegada" solo suene una vez por cliente
+let clientesAlertados = []; 
 
 const gpsOpciones = { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 };
 
@@ -29,7 +33,7 @@ function marcarEntrega(nombre) {
     if (!entregados.includes(nombre)) {
         entregados.push(nombre);
         localStorage.setItem('entregas_realizadas', JSON.stringify(entregados));
-        sonidoCheck.play().catch(e => console.log("Audio bloqueado, toca la pantalla"));
+        sonidoCheck.play().catch(e => console.log("Toca la pantalla para activar audio"));
         actualizarPantalla();
     }
 }
@@ -63,26 +67,25 @@ function actualizarPantalla() {
         const distTxt = d.toFixed(2);
         const esEntregado = entregados.includes(c.nombre);
 
-        // LÓGICA DE SONIDO DE PROXIMIDAD (200 metros)
+        // AVISO DE LLEGADA (200 metros)
         if (!esEntregado && d < 0.20 && !clientesAlertados.includes(c.nombre)) {
             sonidoAlerta.play().catch(e => console.log("Audio bloqueado"));
             clientesAlertados.push(c.nombre);
         }
         
-        const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lon}`;
+        const mapUrl = `https://support.google.com/maps/answer/18539?hl=es&co=GENIE.Platform%3DDesktop{c.lat},${c.lon}`;
         
         lista.innerHTML += `
-            <div class="${esEntregado ? 'bg-gray-200 opacity-60' : (d < 0.20 ? 'bg-yellow-50 border-yellow-400' : 'bg-white')} p-4 rounded-2xl shadow-sm border flex justify-between items-center transition-all">
+            <div class="${esEntregado ? 'bg-gray-200 opacity-60 border-slate-300' : (d < 0.20 ? 'bg-yellow-100 border-yellow-500 scale-105' : 'bg-white border-slate-200')} p-4 rounded-2xl shadow-sm border-2 flex justify-between items-center transition-all">
                 <div class="flex-1">
                     <h3 class="font-bold text-slate-800">${c.nombre}</h3>
-                    <p class="${esEntregado ? 'text-gray-500' : 'text-blue-600'} text-xs font-bold uppercase tracking-wider">
-                        ${esEntregado ? 'Completado ✓' : distTxt + ' km'}
+                    <p class="${esEntregado ? 'text-gray-500' : (d < 0.20 ? 'text-red-600 animate-bounce' : 'text-blue-600')} text-xs font-bold uppercase tracking-wider">
+                        ${esEntregado ? 'Completado ✓' : (d < 0.20 ? '¡HAS LLEGADO!' : distTxt + ' km')}
                     </p>
                 </div>
                 <div class="flex gap-3">
-                    <button onclick="marcarEntrega('${c.nombre}')" class="p-2 ${esEntregado ? 'text-green-600' : 'text-slate-300'} text-2xl font-bold">✓</button>
+                    <button onclick="marcarEntrega('${c.nombre}')" class="p-2 ${esEntregado ? 'text-green-600' : 'text-slate-400'} text-3xl font-bold">✓</button>
                     <a href="${mapUrl}" target="_blank" class="bg-blue-600 p-3 rounded-xl text-white shadow-md">📍</a>
-                    <a href="https://wa.me/${c.tel}" class="bg-green-500 p-3 rounded-xl text-white shadow-md">WA</a>
                 </div>
             </div>
         `;
@@ -106,5 +109,5 @@ navigator.geolocation.watchPosition(pos => {
     const txt = document.getElementById('gps-text');
     dot.className = "w-2.5 h-2.5 bg-red-500 rounded-full";
     txt.innerText = "Sin Señal GPS";
-}, gpsOpciones);;
+}, gpsOpciones);
 
