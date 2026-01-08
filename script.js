@@ -1,5 +1,6 @@
-// LISTA DE CLIENTES (Actualiza las coordenadas aquí)
+// LISTA DE CLIENTES (Tu casa es el primero ahora)
 const clientes = [
+    { nombre: "MI CASA", lat: -34.763602, lon: -56.243176, tel: "+59897919036" }, // Cambia el tel si quieres
     { nombre: "Super La Paz", lat: -34.7621, lon: -56.2234, tel: "099123456" },
     { nombre: "Planta Industrial Sarubbi", lat: -34.8052, lon: -56.2411, tel: "098765432" }
 ];
@@ -59,7 +60,7 @@ function actualizarPantalla() {
         const dist = calcularDistancia(miUbicacion.lat, miUbicacion.lon, c.lat, c.lon);
         const esEntregado = entregados.includes(c.nombre);
         
-        // ENLACE DE GOOGLE MAPS CORREGIDO:
+        // Enlace corregido para abrir la aplicación de mapas
         const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lon}`;
         
         lista.innerHTML += `
