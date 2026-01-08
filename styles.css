@@ -2,41 +2,48 @@
 
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #f8fafc; /* Un gris muy claro de fondo */
+    background-color: #f8fafc; /* Fondo grisáceo muy suave */
     margin: 0;
     color: #1e293b;
 }
 
 .glass-header {
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid #e2e8f0;
     position: sticky;
     top: 0;
     z-index: 50;
 }
 
-/* Tarjetas modernas con fondo blanco */
+/* Tarjetas Estilo App Moderna */
 .cliente-card {
     background: white;
-    border-radius: 20px;
+    border-radius: 24px;
     padding: 20px;
     margin-bottom: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
     border: 1px solid #f1f5f9;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: all 0.3s ease;
 }
 
-/* Botones con colores suaves pero definidos */
+/* Botones Circulares con Colores */
 .btn-action {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-action:active {
+    transform: scale(0.9);
 }
 
 .btn-check { background: #f8fafc; color: #94a3b8; }
@@ -45,10 +52,13 @@ body {
 .btn-maps { background: #eff6ff; color: #2563eb; }
 .btn-wa { background: #f0fdf4; color: #16a34a; }
 
-/* Animación de llegada */
+/* Animación de llegada (Suave) */
 @keyframes pulse-blue {
-    0% { border-color: #e2e8f0; }
+    0% { border-color: #f1f5f9; background-color: #ffffff; }
     50% { border-color: #3b82f6; background-color: #eff6ff; }
-    100% { border-color: #e2e8f0; }
+    100% { border-color: #f1f5f9; background-color: #ffffff; }
 }
-.llegada-anim { animation: pulse-blue 2s infinite; border-width: 2px; }
+.llegada-anim { 
+    animation: pulse-blue 2s infinite ease-in-out; 
+    border-width: 1px;
+}
