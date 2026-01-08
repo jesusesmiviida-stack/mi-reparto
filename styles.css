@@ -1,66 +1,54 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
 
-:root {
-    --primary: #3b82f6;
-    --success: #10b981;
-    --bg: #ffffff;
-}
-
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #fcfdfe;
-    color: #1e293b;
+    background-color: #f8fafc; /* Un gris muy claro de fondo */
     margin: 0;
+    color: #1e293b;
 }
 
-/* Header Minimalista */
 .glass-header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid #f1f5f9;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
     position: sticky;
     top: 0;
     z-index: 50;
 }
 
-/* Tarjetas Estilo "Card Floating" */
+/* Tarjetas modernas con fondo blanco */
 .cliente-card {
-    background: #ffffff;
-    border-radius: 24px;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     border: 1px solid #f1f5f9;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.cliente-card:active {
-    transform: scale(0.98);
-}
-
-/* Botones Modernos (sin bordes negros, con sombras suaves) */
+/* Botones con colores suaves pero definidos */
 .btn-action {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
-    border: none;
 }
 
-.btn-wa { background: #e8f7ef; color: #10b981; }
-.btn-maps { background: #eff6ff; color: #3b82f6; }
-.btn-check { background: #f1f5f9; color: #94a3b8; }
-.btn-check.active { background: #ecfdf5; color: #10b981; }
+.btn-check { background: #f8fafc; color: #94a3b8; }
+.btn-check.active { background: #dcfce7; color: #16a34a; }
 
-/* Animación de "Llegada" moderna */
-@keyframes soft-pulse {
-    0% { background-color: #ffffff; }
-    50% { background-color: #eff6ff; border-color: #3b82f6; }
-    100% { background-color: #ffffff; }
-}
+.btn-maps { background: #eff6ff; color: #2563eb; }
+.btn-wa { background: #f0fdf4; color: #16a34a; }
 
-.llegada-anim {
-    animation: soft-pulse 2s infinite ease-in-out;
-    border: 1px solid #3b82f6;
+/* Animación de llegada */
+@keyframes pulse-blue {
+    0% { border-color: #e2e8f0; }
+    50% { border-color: #3b82f6; background-color: #eff6ff; }
+    100% { border-color: #e2e8f0; }
 }
+.llegada-anim { animation: pulse-blue 2s infinite; border-width: 2px; }
