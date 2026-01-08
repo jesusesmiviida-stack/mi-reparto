@@ -3,10 +3,9 @@ const rutas = {
     "YO": [ 
         { nombre: "MI CASA", lat: -34.763602, lon: -56.243176, tel: "099000000" },
         { nombre: "Super La Paz", lat: -34.7621, lon: -56.2234, tel: "099123456" }
-        { nombre: "Cementerio La Paz", lat: -34.7522039, lon: -56.2288156, tel: "23622619" }
-        { nombre: "Planta Sarubbi", lat: -34.8052, lon: -56.2411, tel: "098765432" }
     ],
     "REPARTIDOR 1": [ 
+        { nombre: "Cementerio La Paz", lat: -34.7522039, lon: -56.2288156, tel: "23622619" },
         { nombre: "Planta Sarubbi", lat: -34.8052, lon: -56.2411, tel: "098765432" }
     ]
 };
@@ -91,7 +90,7 @@ function actualizarPantalla() {
     listaOrdenada.forEach(c => {
         const d = calcularDistancia(miUbicacion.lat, miUbicacion.lon, c.lat, c.lon);
         const esEntregado = entregados.includes(c.nombre);
-        const cerca = d < 0.20 && !esEntregado; // Menos de 200 metros
+        const cerca = d < 0.20 && !esEntregado; 
         
         if (cerca && !clientesAlertados.includes(c.nombre)) {
             sonidoAlerta.play().catch(() => {});
@@ -128,7 +127,7 @@ navigator.geolocation.watchPosition(pos => {
     document.getElementById('gps-text').innerText = "Sin GPS";
 }, { enableHighAccuracy: true });
 
-// Carga inicial
 actualizarPantalla();
+
 
 
