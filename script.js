@@ -1,6 +1,6 @@
 // 1. BASE DE DATOS DE ENTREGAS
 let entregas = [
-    { id: 1, nombre: "Panadería Central", lat: -34.6037, lng: -58.3816, finalizado: false },
+    { id: 1, nombre: "Panadería Central", lat: -34.7619685, lng: -56.2308947, finalizado: false },
     { id: 2, nombre: "Farmacia Sol", lat: -34.6100, lng: -58.4000, finalizado: false },
     { id: 3, nombre: "Supermercado Luna", lat: -34.5900, lng: -58.3700, finalizado: false }
 ];
@@ -87,5 +87,6 @@ function notificarEntrega(nombre) {
     if ("vibrate" in navigator) navigator.vibrate(200);
     console.log(`Entrega completada en: ${nombre}`);
 }
+
 
 iniciarSeguimiento();
