@@ -9,24 +9,34 @@ const rutas = {
     ]
 };
 
-// Lógica de inicio mejorada para que no se bloquee
+// Lógica de usuario
 let usuarioActivo = localStorage.getItem('nombre_repartidor');
-
 if (!usuarioActivo) {
     let eleccion = prompt("¿Quién eres? (Escribe YO o REPARTIDOR 1)");
     usuarioActivo = (eleccion && rutas[eleccion.toUpperCase()]) ? eleccion.toUpperCase() : "YO";
     localStorage.setItem('nombre_repartidor', usuarioActivo);
 }
 
-const clientes = rutas[usuarioActivo] || rutas["YO"]; // Si falla, carga "YO" por defecto
+const clientes = rutas[usuarioActivo] || rutas["YO"];
 
-// --- EL RESTO DEL CÓDIGO ---
+// --- SONIDOS ---
 const sonidoCheck = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3');
 const sonidoAlerta = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1154-fountain-filled.mp3');
 
 let entregados = JSON.parse(localStorage.getItem(`entregas_${usuarioActivo}`)) || [];
 let miUbicacion = { lat: 0, lon: 0 };
 let clientesAlertados = []; 
+
+// --- FUNCIÓN DE REINICIO (CORREGIDA) ---
+function reiniciarRuta() {
+    if (confirm(`¿Quieres limpiar todas las entregas de ${usuarioActivo}?`)) {
+        entregados = [];
+        clientesAlertados = [];
+        localStorage.setItem(`entregas_${usuarioActivo}`, JSON.stringify(entregados));
+        actualizarPantalla();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
 
 function marcarEntrega(nombre) {
     if (!entregados.includes(nombre)) {
@@ -38,8 +48,10 @@ function marcarEntrega(nombre) {
 }
 
 function cambiarUsuario() {
-    localStorage.removeItem('nombre_repartidor');
-    location.reload();
+    if(confirm("¿Cambiar de repartidor?")) {
+        localStorage.removeItem('nombre_repartidor');
+        location.reload();
+    }
 }
 
 function calcularDistancia(lat1, lon1, lat2, lon2) {
@@ -67,8 +79,12 @@ function actualizarPantalla() {
         <div class="mt-1 font-bold">PROGRESO: ${entregados.length} / ${clientes.length}</div>
     `;
 
+    const listaOrdenada = [...clientes].sort((a, b) => {
+        return entregados.includes(a.nombre) - entregados.includes(b.nombre);
+    });
+
     lista.innerHTML = '';
-    clientes.forEach(c => {
+    listaOrdenada.forEach(c => {
         const d = calcularDistancia(miUbicacion.lat, miUbicacion.lon, c.lat, c.lon);
         const esEntregado = entregados.includes(c.nombre);
         
@@ -77,23 +93,25 @@ function actualizarPantalla() {
             clientesAlertados.push(c.nombre);
         }
 
+        // Link de Google Maps arreglado
+        const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lon}&travelmode=driving`;
+
         lista.innerHTML += `
-            <div class="${esEntregado ? 'opacity-50 bg-gray-200' : 'bg-white'} p-4 rounded-2xl shadow-sm border-2 flex justify-between items-center mb-3">
+            <div class="${esEntregado ? 'opacity-50 bg-gray-200' : 'bg-white'} p-4 rounded-2xl shadow-sm border-2 flex justify-between items-center mb-3 transition-all">
                 <div>
                     <h3 class="font-bold text-sm">${c.nombre}</h3>
-                    <p class="text-blue-600 text-xs font-black">${esEntregado ? 'LISTO' : d.toFixed(2) + ' km'}</p>
+                    <p class="text-blue-600 text-xs font-black">${esEntregado ? 'LISTO ✓' : d.toFixed(2) + ' km'}</p>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="marcarEntrega('${c.nombre}')" class="p-2 text-2xl">✓</button>
-                    <a href="https://www.google.com/maps?q=${c.lat},${c.lon}" target="_blank" class="bg-blue-600 p-3 rounded-xl text-white">📍</a>
-                    <a href="https://wa.me/${c.tel}" class="bg-green-500 p-3 rounded-xl text-white">WA</a>
+                    <button onclick="marcarEntrega('${c.nombre}')" class="p-2 text-2xl font-bold ${esEntregado ? 'text-green-600' : 'text-slate-300'}">✓</button>
+                    <a href="${mapUrl}" target="_blank" class="bg-blue-600 p-3 rounded-xl text-white">📍</a>
+                    <a href="https://wa.me/${c.tel}" target="_blank" class="bg-green-500 p-3 rounded-xl text-white">WA</a>
                 </div>
             </div>
         `;
     });
 }
 
-// Iniciar GPS
 navigator.geolocation.watchPosition(pos => {
     miUbicacion.lat = pos.coords.latitude;
     miUbicacion.lon = pos.coords.longitude;
@@ -101,10 +119,9 @@ navigator.geolocation.watchPosition(pos => {
     document.getElementById('gps-text').innerText = "GPS Conectado";
     actualizarPantalla();
 }, () => {
-    document.getElementById('gps-text').innerText = "Error GPS";
+    document.getElementById('gps-text').innerText = "Sin GPS";
 }, { enableHighAccuracy: true });
 
-// Carga inicial forzada
+// Carga inicial
 actualizarPantalla();
-
 
