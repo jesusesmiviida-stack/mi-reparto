@@ -9,10 +9,9 @@ function iniciarApp() {
         navigator.geolocation.watchPosition(pos => {
             const miLat = pos.coords.latitude;
             const miLng = pos.coords.longitude;
-            document.getElementById('status').innerText = `📡 GPS Activo`;
             actualizarDistancias(miLat, miLng);
         }, error => {
-            document.getElementById('status').innerText = "❌ Error GPS: Activa tu ubicación";
+            document.getElementById('status').innerText = "❌ GPS Desactivado";
         }, { enableHighAccuracy: true });
     }
 }
@@ -21,10 +20,10 @@ function actualizarDistancias(miLat, miLng) {
     entregas.forEach(e => {
         if (!e.finalizado) {
             e.distancia = calcularKM(miLat, miLng, e.lat, e.lng);
+            // Auto-finalizar si estás a menos de 50 metros
             if (e.distancia < 0.05) e.finalizado = true;
         }
     });
-    entregas.sort((a, b) => a.finalizado - b.finalizado || a.distancia - b.distancia);
     dibujarInterfaz();
 }
 
@@ -36,33 +35,53 @@ function calcularKM(lat1, lon1, lat2, lon2) {
     return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
 }
 
+// NUEVA FUNCIÓN: Para finalizar manualmente al tocar el botón
+function finalizarEntrega(id) {
+    const index = entregas.findIndex(e => e.id === id);
+    if (index !== -1) {
+        entregas[index].finalizado = true;
+        dibujarInterfaz();
+    }
+}
+
 function dibujarInterfaz() {
     const lista = document.getElementById('lista-entregas');
+    const status = document.getElementById('status');
+    if (!lista) return;
+
+    // Actualizar Contador
+    const total = entregas.length;
+    const hechas = entregas.filter(e => e.finalizado).length;
+    status.innerHTML = `<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-bold">Progreso: ${hechas} / ${total}</span>`;
+
     lista.innerHTML = '';
-    entregas.forEach(e => {
+    
+    // Ordenar: Pendientes arriba, terminados abajo
+    const listaOrdenada = [...entregas].sort((a, b) => a.finalizado - b.finalizado);
+
+    listaOrdenada.forEach(e => {
         const distText = e.distancia ? `${e.distancia.toFixed(2)} km` : '-- km';
-        const wspLink = `https://wa.me/${e.telefono}?text=Hola%20${e.nombre},%20estoy%20en%20camino%20con%20tu%20pedido.`;
-        // Enlace para Google Maps con las coordenadas del cliente
+        const wspLink = `https://wa.me/${e.telefono}?text=Hola%20${e.nombre},%20estoy%20en%20camino.`;
         const mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${e.lat},${e.lng}`;
         
         lista.innerHTML += `
-            <div class="p-4 border-2 rounded-2xl mb-2 flex justify-between items-center ${e.finalizado ? 'bg-green-50 border-green-500' : 'bg-white border-blue-100'}">
+            <div class="p-4 border-2 rounded-2xl mb-2 flex justify-between items-center ${e.finalizado ? 'bg-gray-100 border-gray-300 opacity-60' : 'bg-white border-blue-100 shadow-sm'}">
                 <div class="flex-1">
-                    <h3 class="font-bold text-slate-800">${e.nombre}</h3>
-                    <p class="text-sm text-blue-600 font-bold">${e.finalizado ? '✓ Entregado' : distText}</p>
+                    <h3 class="font-bold ${e.finalizado ? 'text-gray-500 line-through' : 'text-slate-800'}">${e.nombre}</h3>
+                    <p class="text-sm font-bold ${e.finalizado ? 'text-gray-400' : 'text-blue-600'}">${e.finalizado ? '✓ Entregado' : distText}</p>
                 </div>
-                <div class="flex gap-3">
-                    <a href="${mapsLink}" target="_blank" class="bg-blue-600 text-white p-2 rounded-full shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
-                    </a>
-                    <a href="${wspLink}" target="_blank" class="bg-green-500 text-white p-2 rounded-full shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.888 11.888-11.888 3.176 0 6.161 1.237 8.404 3.48s3.481 5.229 3.481 8.406c0 6.556-5.332 11.888-11.888 11.888-2.01 0-3.991-.51-5.741-1.478l-6.243 1.701zm6.086-5.309l.395.235c1.408.84 3.12 1.282 4.885 1.282 5.204 0 9.442-4.238 9.442-9.441 0-2.52-1.01-4.889-2.842-6.722s-4.202-2.841-6.721-2.841c-5.204 0-9.441 4.238-9.441 9.441 0 1.933.566 3.813 1.635 5.41l.258.388-1.071 3.908 4.053-1.103z"/></svg>
-                    </a>
+                <div class="flex gap-2">
+                    ${!e.finalizado ? `
+                        <button onclick="finalizarEntrega(${e.id})" class="bg-gray-200 text-gray-700 p-2 rounded-full shadow-sm">✓</button>
+                        <a href="${mapsLink}" target="_blank" class="bg-blue-600 text-white p-2 rounded-full shadow-md">📍</a>
+                        <a href="${wspLink}" target="_blank" class="bg-green-500 text-white p-2 rounded-full shadow-md">WA</a>
+                    ` : ''}
                 </div>
             </div>`;
     });
 }
 
 iniciarApp();
+
 
 
