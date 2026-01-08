@@ -3,6 +3,8 @@ const rutas = {
     "YO": [ 
         { nombre: "MI CASA", lat: -34.763602, lon: -56.243176, tel: "099000000" },
         { nombre: "Super La Paz", lat: -34.7621, lon: -56.2234, tel: "099123456" }
+         { nombre: "Cementerio La Paz", lat: -34.7522039, lon: -56.2288156, tel: "23622619" },
+        { nombre: "Planta Sarubbi", lat: -34.8052, lon: -56.2411, tel: "098765432" }
     ],
     "REPARTIDOR 1": [ 
         { nombre: "Cementerio La Paz", lat: -34.7522039, lon: -56.2288156, tel: "23622619" },
@@ -128,6 +130,7 @@ navigator.geolocation.watchPosition(pos => {
 }, { enableHighAccuracy: true });
 
 actualizarPantalla();
+
 
 
 
