@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Reparto Hub</title>
+    <title>Reparto Hub Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,27 +12,34 @@
     <header class="glass-header px-6 py-4 mb-6">
         <div class="max-w-md mx-auto flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <img src="logo.png" alt="Logo" class="w-12 h-12 rounded-2xl bg-slate-100 object-cover border border-slate-200 shadow-sm">
+                <img src="logo.png" alt="L" class="w-12 h-12 rounded-2xl bg-slate-100 object-cover border border-slate-200 shadow-sm">
                 <div>
                     <h1 class="font-extrabold text-slate-900 text-lg leading-tight">Ruta de Hoy</h1>
                     <div id="gps-indicator" class="flex items-center gap-1.5">
-                        <div id="gps-dot" class="w-2 h-2 bg-slate-300 rounded-full"></div>
-                        <p id="gps-text" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Esperando GPS</p>
+                        <div id="gps-dot" class="w-2.5 h-2.5 bg-slate-300 rounded-full transition-colors duration-500"></div>
+                        <p id="gps-text" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Buscando GPS</p>
                     </div>
                 </div>
             </div>
             <div class="text-right">
                 <p id="status" class="text-sm font-black text-blue-600">0/0</p>
+                <div class="w-16 bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden ml-auto">
+                    <div id="progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-700"></div>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-md mx-auto px-4">
+    <main class="max-w-md mx-auto px-5">
         <div id="lista-entregas"></div>
 
-        <button onclick="reiniciarRuta()" class="w-full mt-10 py-4 bg-white text-slate-400 rounded-2xl font-bold text-[10px] tracking-[0.2em] border border-slate-100 uppercase shadow-sm active:bg-slate-50 transition-colors">
+        <button onclick="reiniciarRuta()" class="w-full mt-12 py-4 bg-white text-slate-400 rounded-2xl font-bold text-[10px] tracking-[0.2em] border border-slate-100 uppercase shadow-sm active:bg-slate-50 transition-colors">
             Reiniciar Jornada
         </button>
+        
+        <p class="text-center text-[9px] text-slate-300 font-bold uppercase tracking-[0.3em] mt-8 pb-10">
+            Smart Logistics System v3.0
+        </p>
     </main>
 
     <script src="script.js"></script>
