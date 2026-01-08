@@ -4,11 +4,10 @@ const clientes = [
     { nombre: "Planta Industrial Sarubbi", lat: -34.8052, lon: -56.2411, tel: "098765432" }
 ];
 
-// SONIDOS MÁS FUERTES Y CLAROS
+// SONIDOS FUERTES
 const sonidoCheck = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3');
 const sonidoAlerta = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1154-fountain-filled.mp3');
 
-// Forzar volumen máximo
 sonidoCheck.volume = 1.0;
 sonidoAlerta.volume = 1.0;
 
@@ -33,7 +32,7 @@ function marcarEntrega(nombre) {
     if (!entregados.includes(nombre)) {
         entregados.push(nombre);
         localStorage.setItem('entregas_realizadas', JSON.stringify(entregados));
-        sonidoCheck.play().catch(e => console.log("Toca la pantalla para activar audio"));
+        sonidoCheck.play().catch(e => console.log("Interacción requerida para audio"));
         actualizarPantalla();
     }
 }
@@ -67,25 +66,25 @@ function actualizarPantalla() {
         const distTxt = d.toFixed(2);
         const esEntregado = entregados.includes(c.nombre);
 
-        // AVISO DE LLEGADA (200 metros)
         if (!esEntregado && d < 0.20 && !clientesAlertados.includes(c.nombre)) {
             sonidoAlerta.play().catch(e => console.log("Audio bloqueado"));
             clientesAlertados.push(c.nombre);
         }
         
-        const mapUrl = `https://support.google.com/maps/answer/18539?hl=es&co=GENIE.Platform%3DDesktop{c.lat},${c.lon}`;
+        const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lon}`;
         
         lista.innerHTML += `
-            <div class="${esEntregado ? 'bg-gray-200 opacity-60 border-slate-300' : (d < 0.20 ? 'bg-yellow-100 border-yellow-500 scale-105' : 'bg-white border-slate-200')} p-4 rounded-2xl shadow-sm border-2 flex justify-between items-center transition-all">
+            <div class="${esEntregado ? 'bg-gray-200 opacity-60 border-slate-300' : (d < 0.20 ? 'bg-yellow-100 border-yellow-500 scale-105' : 'bg-white border-slate-200')} p-4 rounded-2xl shadow-sm border-2 flex justify-between items-center transition-all mb-3">
                 <div class="flex-1">
-                    <h3 class="font-bold text-slate-800">${c.nombre}</h3>
-                    <p class="${esEntregado ? 'text-gray-500' : (d < 0.20 ? 'text-red-600 animate-bounce' : 'text-blue-600')} text-xs font-bold uppercase tracking-wider">
-                        ${esEntregado ? 'Completado ✓' : (d < 0.20 ? '¡HAS LLEGADO!' : distTxt + ' km')}
+                    <h3 class="font-bold text-slate-800 text-sm leading-tight">${c.nombre}</h3>
+                    <p class="${esEntregado ? 'text-gray-500' : (d < 0.20 ? 'text-red-600 animate-bounce' : 'text-blue-600')} text-[10px] font-black uppercase mt-1">
+                        ${esEntregado ? 'Completado ✓' : (d < 0.20 ? '¡LLEGASTE!' : distTxt + ' km')}
                     </p>
                 </div>
-                <div class="flex gap-3">
-                    <button onclick="marcarEntrega('${c.nombre}')" class="p-2 ${esEntregado ? 'text-green-600' : 'text-slate-400'} text-3xl font-bold">✓</button>
-                    <a href="${mapUrl}" target="_blank" class="bg-blue-600 p-3 rounded-xl text-white shadow-md">📍</a>
+                <div class="flex gap-2 ml-2">
+                    <button onclick="marcarEntrega('${c.nombre}')" class="p-2 ${esEntregado ? 'text-green-600' : 'text-slate-400'} text-2xl font-bold">✓</button>
+                    <a href="${mapUrl}" target="_blank" class="bg-blue-600 p-3 rounded-xl text-white shadow-md flex items-center justify-center">📍</a>
+                    <a href="https://wa.me/${c.tel}" target="_blank" class="bg-green-500 p-3 rounded-xl text-white shadow-md flex items-center justify-center font-bold text-xs italic">WA</a>
                 </div>
             </div>
         `;
