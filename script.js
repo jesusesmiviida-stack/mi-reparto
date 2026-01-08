@@ -1,4 +1,4 @@
-// LISTA DE CLIENTES
+// LISTA DE CLIENTES (Actualiza las coordenadas aquí)
 const clientes = [
     { nombre: "Super La Paz", lat: -34.7621, lon: -56.2234, tel: "099123456" },
     { nombre: "Planta Industrial Sarubbi", lat: -34.8052, lon: -56.2411, tel: "098765432" }
@@ -59,6 +59,9 @@ function actualizarPantalla() {
         const dist = calcularDistancia(miUbicacion.lat, miUbicacion.lon, c.lat, c.lon);
         const esEntregado = entregados.includes(c.nombre);
         
+        // ENLACE DE GOOGLE MAPS CORREGIDO:
+        const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lon}`;
+        
         lista.innerHTML += `
             <div class="${esEntregado ? 'bg-gray-200 opacity-60' : 'bg-white'} p-4 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center transition-all">
                 <div class="flex-1">
@@ -69,7 +72,7 @@ function actualizarPantalla() {
                 </div>
                 <div class="flex gap-3">
                     <button onclick="marcarEntrega('${c.nombre}')" class="p-2 ${esEntregado ? 'text-green-600' : 'text-slate-300'} text-2xl font-bold">✓</button>
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lon}" target="_blank" class="bg-blue-600 p-3 rounded-xl text-white shadow-md">📍</a>
+                    <a href="${mapUrl}" target="_blank" class="bg-blue-600 p-3 rounded-xl text-white shadow-md">📍</a>
                     <a href="https://wa.me/${c.tel}" class="bg-green-500 p-3 rounded-xl text-white shadow-md">WA</a>
                 </div>
             </div>
