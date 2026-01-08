@@ -10,10 +10,19 @@ const rutas = {
 let usuarioActivo = "YO";
 let entregados = JSON.parse(localStorage.getItem(`entregas_${usuarioActivo}`)) || [];
 let miUbicacion = { lat: 0, lon: 0 };
+let clientesAlertados = []; // Para que no vibre/suene mil veces en el mismo lugar
+
 const sonidoAlerta = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1154-fountain-filled.mp3');
+
+function vibrar(patron) {
+    if (navigator.vibrate) {
+        navigator.vibrate(patron);
+    }
+}
 
 function marcarEntrega(nombre) {
     if (!entregados.includes(nombre)) {
+        vibrar(50); // Vibración corta de confirmación
         entregados.push(nombre);
         localStorage.setItem(`entregas_${usuarioActivo}`, JSON.stringify(entregados));
         actualizarPantalla();
@@ -22,6 +31,7 @@ function marcarEntrega(nombre) {
 
 function reiniciarRuta() {
     if (confirm("¿Quieres limpiar la lista para mañana?")) {
+        vibrar([30, 50, 30]); // Vibración triple de reinicio
         entregados = [];
         localStorage.setItem(`entregas_${usuarioActivo}`, JSON.stringify(entregados));
         location.reload();
@@ -52,6 +62,13 @@ function actualizarPantalla() {
         const esEntregado = entregados.includes(c.nombre);
         const cerca = d < 0.20 && !esEntregado;
 
+        // Alerta de proximidad con vibración
+        if (cerca && !clientesAlertados.includes(c.nombre)) {
+            vibrar([200, 100, 200]); // Dos vibraciones largas
+            sonidoAlerta.play().catch(() => {});
+            clientesAlertados.push(c.nombre);
+        }
+
         lista.innerHTML += `
             <div class="cliente-card p-5 rounded-2xl flex justify-between items-center shadow-sm ${esEntregado ? 'opacity-40 grayscale' : (cerca ? 'llegada-anim' : '')}">
                 <div class="flex-1 text-left">
@@ -62,7 +79,7 @@ function actualizarPantalla() {
                 </div>
                 <div class="flex gap-2 ml-4">
                     <button onclick="marcarEntrega('${c.nombre}')" class="w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-inner ${esEntregado ? 'bg-green-100 text-green-600' : 'bg-slate-100 text-slate-400'}">✓</button>
-                    <a href="https://www.google.com/maps?q=${c.lat},${c.lon}" target="_blank" class="btn-maps w-10 h-10 rounded-full flex items-center justify-center text-white shadow-md">📍</a>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lon}" target="_blank" class="btn-maps w-10 h-10 rounded-full flex items-center justify-center text-white shadow-md">📍</a>
                     <a href="https://wa.me/${c.tel}" target="_blank" class="btn-wa w-10 h-10 rounded-full flex items-center justify-center text-white shadow-md">💬</a>
                 </div>
             </div>
@@ -73,9 +90,14 @@ function actualizarPantalla() {
 navigator.geolocation.watchPosition(pos => {
     miUbicacion.lat = pos.coords.latitude;
     miUbicacion.lon = pos.coords.longitude;
-    document.getElementById('gps-dot').style.backgroundColor = '#22c55e'; // Verde
-    document.getElementById('gps-text').innerText = "GPS CONECTADO";
+    const dot = document.getElementById('gps-dot');
+    if(dot) dot.style.backgroundColor = '#22c55e'; 
+    const text = document.getElementById('gps-text');
+    if(text) text.innerText = "GPS CONECTADO";
     actualizarPantalla();
 }, null, { enableHighAccuracy: true });
 
 actualizarPantalla();
+
+actualizarPantalla();
+
