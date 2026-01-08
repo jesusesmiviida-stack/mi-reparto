@@ -22,12 +22,14 @@ const clientes = rutas[usuarioActivo] || rutas["YO"];
 // --- SONIDOS ---
 const sonidoCheck = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3');
 const sonidoAlerta = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1154-fountain-filled.mp3');
+sonidoCheck.volume = 1.0;
+sonidoAlerta.volume = 1.0;
 
 let entregados = JSON.parse(localStorage.getItem(`entregas_${usuarioActivo}`)) || [];
 let miUbicacion = { lat: 0, lon: 0 };
 let clientesAlertados = []; 
 
-// --- FUNCIÓN DE REINICIO (CORREGIDA) ---
+// --- FUNCIONES DE CONTROL ---
 function reiniciarRuta() {
     if (confirm(`¿Quieres limpiar todas las entregas de ${usuarioActivo}?`)) {
         entregados = [];
@@ -87,25 +89,27 @@ function actualizarPantalla() {
     listaOrdenada.forEach(c => {
         const d = calcularDistancia(miUbicacion.lat, miUbicacion.lon, c.lat, c.lon);
         const esEntregado = entregados.includes(c.nombre);
+        const cerca = d < 0.20 && !esEntregado; // Menos de 200 metros
         
-        if (!esEntregado && d < 0.20 && !clientesAlertados.includes(c.nombre)) {
+        if (cerca && !clientesAlertados.includes(c.nombre)) {
             sonidoAlerta.play().catch(() => {});
             clientesAlertados.push(c.nombre);
         }
 
-        // Link de Google Maps arreglado
         const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lon}&travelmode=driving`;
 
         lista.innerHTML += `
-            <div class="${esEntregado ? 'opacity-50 bg-gray-200' : 'bg-white'} p-4 rounded-2xl shadow-sm border-2 flex justify-between items-center mb-3 transition-all">
-                <div>
-                    <h3 class="font-bold text-sm">${c.nombre}</h3>
-                    <p class="text-blue-600 text-xs font-black">${esEntregado ? 'LISTO ✓' : d.toFixed(2) + ' km'}</p>
+            <div class="${esEntregado ? 'opacity-50 bg-gray-200' : (cerca ? 'bg-yellow-100 border-yellow-500 scale-105' : 'bg-white border-slate-200')} p-4 rounded-2xl shadow-sm border-2 flex justify-between items-center mb-3 transition-all duration-300">
+                <div class="flex-1">
+                    <h3 class="font-bold text-sm text-slate-800">${c.nombre}</h3>
+                    <p class="${esEntregado ? 'text-gray-500' : (cerca ? 'text-red-600 animate-bounce' : 'text-blue-600')} text-xs font-black uppercase mt-1">
+                        ${esEntregado ? 'LISTO ✓' : (cerca ? '¡HAS LLEGADO!' : d.toFixed(2) + ' km')}
+                    </p>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="marcarEntrega('${c.nombre}')" class="p-2 text-2xl font-bold ${esEntregado ? 'text-green-600' : 'text-slate-300'}">✓</button>
-                    <a href="${mapUrl}" target="_blank" class="bg-blue-600 p-3 rounded-xl text-white">📍</a>
-                    <a href="https://wa.me/${c.tel}" target="_blank" class="bg-green-500 p-3 rounded-xl text-white">WA</a>
+                <div class="flex gap-2 ml-2">
+                    <button onclick="marcarEntrega('${c.nombre}')" class="p-2 text-2xl font-bold ${esEntregado ? 'text-green-600' : 'text-slate-400'}">✓</button>
+                    <a href="${mapUrl}" target="_blank" class="bg-blue-600 p-3 rounded-xl text-white shadow-md">📍</a>
+                    <a href="https://wa.me/${c.tel}" target="_blank" class="bg-green-500 p-3 rounded-xl text-white shadow-md italic font-bold text-xs">WA</a>
                 </div>
             </div>
         `;
@@ -115,7 +119,7 @@ function actualizarPantalla() {
 navigator.geolocation.watchPosition(pos => {
     miUbicacion.lat = pos.coords.latitude;
     miUbicacion.lon = pos.coords.longitude;
-    document.getElementById('gps-dot').className = "w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse";
+    document.getElementById('gps-dot').className = "w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]";
     document.getElementById('gps-text').innerText = "GPS Conectado";
     actualizarPantalla();
 }, () => {
