@@ -1,6 +1,7 @@
 let entregas = [
-    { id: 1, nombre: "Super La Paz", lat: -34.7619729, lng: -56.2283198, telefono: "59899123456", finalizado: false },
+    { id: 1, nombre: "Super La Paz", lat: -34.7619729, lng: -56.2283198, telefono: "59897919036", finalizado: false },
     { id: 2, nombre: "Cliente de Prueba", lat: -34.6037, lng: -58.3816, telefono: "59899000000", finalizado: false }
+    { id: 3, nombre: "Planta Sarubbi", lat: -34.8055454, lng: -56.187732, telefono: "59823219328", finalizado: false },
 ];
 
 function iniciarApp() {
@@ -59,3 +60,4 @@ function dibujarInterfaz() {
 }
 
 iniciarApp();
+
