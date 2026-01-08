@@ -87,7 +87,8 @@ function notificarEntrega(nombre) {
     if ("vibrate" in navigator) navigator.vibrate(200);
     console.log(`Entrega completada en: ${nombre}`);
 }
-
+dibujarInterfaz();
 
 iniciarSeguimiento();
+
 
