@@ -1,213 +1,178 @@
-/* =========================================
-   1. VARIABLES Y BASE
-   ========================================= */
+/* ==========================================================================
+   1. VARIABLES Y CONFIGURACIÓN BASE
+   ========================================================================== */
 :root {
     --azul: #2b569a;
     --azul-claro: #3b71ca;
-    --verde: #25d366;
-    --blanco: #ffffff;
+    --verde-wa: #25d366;
     --fondo: #f8f9fa;
+    --blanco: #ffffff;
+    --texto: #333333;
+    --sombra: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-body { background: var(--fondo); color: #333; overflow-x: hidden; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
 
-/* =========================================
-   2. NAVEGACIÓN
-   ========================================= */
-.navbar { background: var(--blanco); padding: 15px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-.nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
-.logo-text { color: var(--azul); font-weight: 800; font-size: 1.4rem; }
+body {
+    background-color: var(--fondo);
+    color: var(--texto);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
 
-/* Menú Móvil */
-.menu-toggle { display: block; cursor: pointer; }
-.menu-toggle .bar { display: block; width: 25px; height: 3px; margin: 5px; background: var(--azul); transition: 0.3s; }
+/* ==========================================================================
+   2. NAVEGACIÓN (HEADER)
+   ========================================================================== */
+.navbar {
+    background: var(--blanco);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.nav-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.logo-text {
+    color: var(--azul);
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+/* Menú Móvil (Hamburguesa) */
+.menu-toggle {
+    display: block;
+    cursor: pointer;
+    z-index: 1100;
+}
+
+.menu-toggle .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px 0;
+    background: var(--azul);
+    transition: 0.3s ease;
+}
 
 .nav-menu {
-    position: fixed; top: 0; right: -100%; width: 75%; height: 100vh;
-    background: var(--blanco); display: flex; flex-direction: column;
-    align-items: center; justify-content: center; transition: 0.4s ease; z-index: 999;
-}
-.nav-menu.active { right: 0; }
-.nav-menu a { text-decoration: none; color: var(--azul); font-size: 1.4rem; margin: 15px; font-weight: 700; }
-
-.desktop-menu { display: none; gap: 20px; }
-.desktop-menu a { text-decoration: none; color: #555; font-weight: 600; font-size: 0.9rem; }
-
-/* =========================================
-   3. SECCIONES Y CARRUSELES
-   ========================================= */
-.hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1510590337019-5ef8d3d32116?q=80&w=1200'); background-size: cover; background-position: center; height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding: 20px; }
-.container { padding: 30px 20px; max-width: 1100px; margin: 0 auto; }
-.section-title { color: var(--azul); border-left: 5px solid var(--azul-claro); padding-left: 15px; margin-bottom: 20px; }
-
-/* Scroll Horizontal Común */
-.horizontal-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 20px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-.horizontal-scroll::-webkit-scrollbar { display: none; }
-
-/* Tarjetas Eventos */
-.card { min-width: 260px; height: 280px; background: white; border-radius: 15px; overflow: hidden; flex-shrink: 0; scroll-snap-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-.card-img { height: 140px; position: relative; }
-.card-img img { width: 100%; height: 100%; object-fit: cover; }
-.badge { position: absolute; top: 10px; right: 10px; background: #2ce080; color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 700; }
-.card-body { padding: 15px; text-align: center; }
-
-/* Programas */
-.program-item { background: white; padding: 10px; border-radius: 15px; display: flex; align-items: center; min-width: 240px; flex-shrink: 0; border: 1px solid #eee; }
-.program-img-wrapper { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #2ce080; overflow: hidden; margin-right: 12px; flex-shrink: 0; }
-.program-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-
-/* =========================================
-   4. GALERÍA AUTOMÁTICA CON ZOOM
-   ========================================= */
-.foto-card {
-    min-width: 240px; height: 180px; flex-shrink: 0;
-    border-radius: 15px; overflow: hidden; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: 0.3s;
-}
-.foto-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-
-.foto-card:hover img { transform: scale(1.15); }
-
-/* =========================================
-   5. RESPONSIVE PC
-   ========================================= */
-@media (min-width: 1024px) {
-    .menu-toggle { display: none; }
-    .desktop-menu { display: flex; }
-    .hero h1 { font-size: 3.5rem; }
-    .horizontal-scroll { flex-wrap: wrap; overflow-x: hidden; }
-    .foto-card { min-width: calc(25% - 15px); height: 200px; }
-}
-
-/* BOTONES */
-.btn-wa-hero { background: var(--verde); color: white; text-decoration: none; padding: 12px 30px; border-radius: 50px; font-weight: 700; margin-top: 15px; display: inline-block; }
-.wa-float { position: fixed; bottom: 20px; right: 20px; background: var(--verde); width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 1001; }
-/* =========================================
-   6. FOOTER (PIE DE PÁGINA)
-   ========================================= */
-.footer {
-    background: #1a1a1a;
-    color: white;
-    padding: 50px 0 20px 0;
-    margin-top: 40px;
-}
-
-.footer-content {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    height: 100vh;
+    background: var(--blanco);
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    text-align: center;
-}
-
-.footer-logo p {
-    font-size: 0.9rem;
-    opacity: 0.7;
-    margin-top: 5px;
-}
-
-.footer-social h4, .footer-contact h4 {
-    margin-bottom: 15px;
-    color: var(--azul-claro);
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-}
-
-.social-links {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.social-icon {
-    width: 40px;
-    height: 40px;
-    background: rgba(255,255,255,0.1);
-    display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    color: white;
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1050;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+}
+
+.nav-menu.active {
+    right: 0;
+}
+
+.nav-menu a {
     text-decoration: none;
-    font-weight: bold;
-    font-size: 0.8rem;
+    color: var(--azul);
+    font-size: 1.4rem;
+    margin: 15px 0;
+    font-weight: 700;
+}
+
+/* Menú Escritorio (Oculto en móvil) */
+.desktop-menu {
+    display: none;
+    gap: 25px;
+}
+
+.desktop-menu a {
+    text-decoration: none;
+    color: var(--texto);
+    font-weight: 600;
+    font-size: 0.95rem;
     transition: 0.3s;
 }
 
-.social-icon:hover {
-    background: var(--azul-claro);
-    transform: translateY(-3px);
+.desktop-menu a:hover {
+    color: var(--azul-claro);
 }
 
-.footer-contact p {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    margin-bottom: 5px;
+/* ==========================================================================
+   3. SECCIONES GENERALES Y HERO
+   ========================================================================== */
+.container {
+    padding: 40px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
-.footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.1);
-    margin-top: 40px;
-    padding-top: 20px;
-    text-align: center;
-    font-size: 0.8rem;
-    opacity: 0.5;
-}
-
-/* Ajuste Footer para PC */
-@media (min-width: 768px) {
-    .footer-content {
-        flex-direction: row;
-        justify-content: space-between;
-        text-align: left;
-    }
-    .social-links {
-        justify-content: flex-start;
-    }
-}
-/* =========================================
-   CARRUSELES (Comportamiento General)
-   ========================================= */
-.horizontal-scroll {
+.hero {
+    height: 60vh;
+    background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), 
+                url('https://images.unsplash.com/photo-1510590337019-5ef8d3d32116?q=80&w=1200');
+    background-size: cover;
+    background-position: center;
     display: flex;
-    overflow-x: auto;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.hero h1 span {
+    color: var(--azul-claro);
+    display: block;
+}
+
+.section-title {
+    color: var(--azul);
+    border-left: 5px solid var(--azul-claro);
+    padding-left: 15px;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+/* ==========================================================================
+   4. EVENTOS (Diseño Compacto en Lista para Móvil)
+   ========================================================================== */
+.eventos-lista {
+    display: flex;
+    flex-direction: column;
     gap: 15px;
-    padding-bottom: 20px;
 }
 
-/* =========================================
-   EVENTOS - EFECTO COLUMNA EN MÓVIL
-   ========================================= */
-@media (max-width: 767px) {
-    /* Quitamos el scroll horizontal solo para Eventos */
-    #eventos .horizontal-scroll {
-        flex-direction: column; /* Apila hacia abajo */
-        overflow-x: hidden;     /* Quita el deslizamiento lateral */
-    }
-
-    /* Las tarjetas ahora ocupan el 100% del ancho */
-    #eventos .card {
-        min-width: 100%;
-        max-width: 100%;
-        height: auto;           /* Altura flexible para que no se vea cortado */
-        margin-bottom: 15px;
-    }
-
-    #eventos .card-img {
-        height: 200px;          /* Imagen un poco más grande para que destaque */
-    }
-}
-
-/* =========================================
-   TARJETAS DE EVENTOS (PC y General)
-   ========================================= */
 .card {
-    background: white;
-    border-radius: 15px;
+    display: flex;
+    background: var(--blanco);
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    height: 100px;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.card-img {
+    width: 100px;
+    height: 100%;
     flex-shrink: 0;
+    position: relative;
 }
 
 .card-img img {
@@ -215,101 +180,590 @@ body { background: var(--fondo); color: #333; overflow-x: hidden; }
     height: 100%;
     object-fit: cover;
 }
-/* ==========================================================================
-   1. VARIABLES Y CONFIGURACIÓN BASE
-   ========================================================================== */
-:root {
-    --azul: #2b569a;
-    --azul-claro: #3b71ca;
-    --verde: #25d366;
-    --fondo: #f8f9fa;
-    --blanco: #ffffff;
+
+.card-body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-body { background: var(--fondo); color: #333; overflow-x: hidden; scroll-behavior: smooth; }
-
-/* ==========================================================================
-   2. NAVEGACIÓN (Navbar y Menú Móvil)
-   ========================================================================== */
-.navbar { background: var(--blanco); padding: 15px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-.nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
-.logo-text { color: var(--azul); font-weight: 800; font-size: 1.4rem; }
-
-.menu-toggle { display: block; cursor: pointer; z-index: 1001; }
-.menu-toggle .bar { display: block; width: 25px; height: 3px; margin: 5px; background: var(--azul); transition: 0.3s; }
-
-.nav-menu {
-    position: fixed; top: 0; right: -100%; width: 75%; height: 100vh;
-    background: var(--blanco); display: flex; flex-direction: column;
-    align-items: center; justify-content: center; transition: 0.4s ease; z-index: 999;
+.card-body h3 {
+    font-size: 1rem;
+    color: var(--azul);
+    margin-bottom: 3px;
 }
-.nav-menu.active { right: 0; }
-.nav-menu a { text-decoration: none; color: var(--azul); font-size: 1.4rem; margin: 15px; font-weight: 700; }
 
-/* ==========================================================================
-   3. HERO Y CONTENEDORES
-   ========================================================================== */
-.hero { height: 50vh; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1510590337019-5ef8d3d32116?q=80&w=1200'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding: 20px; }
-.container { padding: 30px 20px; max-width: 1100px; margin: 0 auto; }
-.section-title { color: var(--azul); border-left: 5px solid var(--azul-claro); padding-left: 15px; margin-bottom: 20px; }
+.card-body p {
+    font-size: 0.8rem;
+    color: #666;
+}
 
-/* ==========================================================================
-   4. DISEÑO MÓVIL (Eventos y Programas en COLUMNA)
-   ========================================================================== */
-@media (max-width: 767px) {
-    /* Forzamos a que Eventos y Programas se vean hacia abajo */
-    #eventos .horizontal-scroll, 
-    #programas .horizontal-scroll {
-        flex-direction: column;
-        overflow-x: hidden;
-    }
-
-    /* Tarjetas de Eventos al 100% */
-    #eventos .card {
-        min-width: 100%;
-        max-width: 100%;
-        height: auto;
-        margin-bottom: 20px;
-    }
-
-    /* Programas al 100% */
-    #programas .program-item {
-        min-width: 100%;
-        margin-bottom: 10px;
-    }
+.badge {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: var(--verde-wa);
+    color: white;
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
 }
 
 /* ==========================================================================
-   5. GALERÍA (Mantiene Carrusel Automático)
+   5. PROGRAMAS (Lista con Logo y Colores)
    ========================================================================== */
-.galeria-carousel { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 20px; scroll-snap-type: x mandatory; }
-.galeria-carousel::-webkit-scrollbar { display: none; }
+.title-with-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.section-logo {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
+.programas-columna {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.program-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    background: var(--blanco);
+    border-radius: 15px;
+    border: 1px solid #eee;
+}
+
+.program-logo-circular {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.program-logo-circular img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.program-content h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.schedule-tag {
+    font-size: 0.75rem;
+    color: #777;
+    background: #f0f2f5;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* Clases de Colores para Programas */
+.prog-amarillo .program-logo-circular { border: 3px solid #ffcc00; }
+.prog-amarillo h4 { color: #cca300; }
+
+.prog-rojo .program-logo-circular { border: 3px solid #ff4d4d; }
+.prog-rojo h4 { color: #e60000; }
+
+.prog-azul .program-logo-circular { border: 3px solid #3399ff; }
+.prog-azul h4 { color: #0073e6; }
+
+/* ==========================================================================
+   6. GALERÍA (Carrusel Automático)
+   ========================================================================== */
+.galeria-carousel {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 10px 0;
+    scroll-behavior: smooth;
+}
+
+.galeria-carousel::-webkit-scrollbar {
+    display: none;
+}
 
 .foto-card {
-    min-width: 260px; height: 180px; flex-shrink: 0;
-    border-radius: 15px; overflow: hidden; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: 0.3s;
+    min-width: 260px;
+    height: 190px;
+    border-radius: 15px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: var(--sombra);
 }
-.foto-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s ease; }
-.foto-card:hover img { transform: scale(1.15); }
+
+.foto-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.foto-card:hover img {
+    transform: scale(1.15);
+}
 
 /* ==========================================================================
-   6. RESPONSIVE PARA PC
+   7. FOOTER Y BOTÓN FLOTANTE
+   ========================================================================== */
+.footer {
+    background: #1a1a1a;
+    color: white;
+    padding: 40px 20px 20px;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-icon {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    background: rgba(255,255,255,0.1);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.wa-float {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: var(--verde-wa);
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* ==========================================================================
+   8. RESPONSIVE (Escritorio / PC)
    ========================================================================== */
 @media (min-width: 1024px) {
     .menu-toggle { display: none; }
-    .desktop-menu { display: flex; gap: 20px; }
-    .desktop-menu a { text-decoration: none; color: #555; font-weight: 600; }
-    
-    .horizontal-scroll { flex-wrap: wrap; overflow-x: hidden; }
-    .foto-card { min-width: calc(25% - 15px); height: 220px; }
+    .desktop-menu { display: flex; }
+    .nav-menu { display: none; }
+
+    .eventos-lista {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        width: calc(50% - 15px); /* Dos por fila en PC */
+        height: 140px;
+    }
+
+    .card-img { width: 150px; }
+
+    .programas-columna {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .hero h1 { font-size: 3.5rem; }
+}
+/* =========================================
+   TITULO DE SECCIÓN CON LOGO PEQUEÑO
+   ========================================= */
+.title-with-logo {
+    display: flex;
+    align-items: center; /* Centra el logo con el texto */
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.section-logo {
+    width: 35px;         /* Tamaño corregido: elegante y pequeño */
+    height: 35px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.title-with-logo .section-title {
+    margin-bottom: 0;    /* Elimina espacios extra */
+    line-height: 1;
 }
 
 /* =========================================
-   7. FOOTER MODERNO
+   PROGRAMAS: COLORES Y LOGOS CIRCULARES
    ========================================= */
-.footer { background: #1a1a1a; color: white; padding: 40px 20px; text-align: center; margin-top: 30px; }
-.footer-content { display: flex; flex-direction: column; gap: 20px; }
-.social-links { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
-.social-icon { color: white; text-decoration: none; font-size: 1.2rem; background: rgba(255,255,255,0.1); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+.programas-columna {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.program-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    background: var(--blanco);
+    border-radius: 15px;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.program-logo-circular {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.program-logo-circular img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* PALETA DE COLORES (BORDE + TÍTULO) */
+
+/* Amarillo - Generales de la Fe */
+.prog-amarillo .program-logo-circular { border: 3px solid #ffcc00; }
+.prog-amarillo h4 { color: #cca300; }
+
+/* Rojo - La Mesa Servida */
+.prog-rojo .program-logo-circular { border: 3px solid #ff4d4d; }
+.prog-rojo h4 { color: #e60000; }
+
+/* Azul - Soy todo Oídos */
+.prog-azul .program-logo-circular { border: 3px solid #3399ff; }
+.prog-azul h4 { color: #0073e6; }
+
+/* Morado - Fake News (NUEVO) */
+.prog-morado .program-logo-circular { border: 3px solid #a64dff; }
+.prog-morado h4 { color: #7a00e6; }
+
+/* Verde (Opcional) */
+.prog-verde .program-logo-circular { border: 3px solid #2ce080; }
+.prog-verde h4 { color: #1eb865; }
+
+/* Etiquetas de horario */
+.schedule-tag {
+    font-size: 0.75rem;
+    color: #666;
+    background: #f0f2f5;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+/* Párrafo (Lema) más grande */
+.hero-motto {
+    font-size: 1.3rem; /* Tamaño aumentado */
+    font-weight: 500;
+    max-width: 800px;
+    margin: 20px auto 30px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.9);
+    font-style: italic;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Botón "Quiero unirme" Corregido y Moderno */
+.btn-unirme-pro {
+    display: inline-block;
+    padding: 15px 35px;
+    background-color: var(--blanco);
+    color: var(--azul);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 50px; /* Bordes redondeados */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-unirme-pro:hover {
+    transform: translateY(-3px); /* Sube un poquito al pasar el mouse */
+    background-color: var(--azul-claro);
+    color: white;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* Ajuste para celular */
+@media (max-width: 767px) {
+    .hero-motto {
+        font-size: 1.1rem; /* Un poco más pequeño en móvil pero aún legible */
+        padding: 0 10px;
+    }
+    .btn-unirme-pro {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+    }
+}
+/* Efecto de entrada suave */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* BOTONES DE REDES SOCIALES DEBAJO DE PROGRAMAS */
+.social-section-programas {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px dashed #ccc;
+}
+
+.social-section-programas p {
+    font-weight: 600;
+    color: var(--azul);
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.social-buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-social {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%; /* Redondeados */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+
+.btn-social:hover { transform: scale(1.1); }
+
+/* Colores Oficiales */
+.btn-social.fb { background: #1877F2; } /* Azul Facebook */
+.btn-social.ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); } /* Degradado Instagram */
+
+/* TARJETA DE INFORMACIÓN DE LA IGLESIA */
+.info-iglesia { margin-top: 20px; }
+
+.info-card-blue {
+    background: var(--azul);
+    color: white;
+    padding: 25px;
+    border-radius: 20px;
+    display: grid;
+    gap: 20px;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.info-icon { font-size: 1.5rem; }
+
+.info-item h4 {
+    font-size: 1rem;
+    margin-bottom: 2px;
+    color: var(--azul-claro);
+}
+
+.info-item p { font-size: 0.9rem; opacity: 0.9; }
+
+/* En PC la info se pone de a dos */
+@media (min-width: 1024px) {
+    .info-card-blue { grid-template-columns: 1fr 1fr; }
+}
+/* ESTILO DEL MAPA */
+.map-container {
+    margin-top: 20px;
+    border-radius: 20px; /* Redondeado como las tarjetas */
+    overflow: hidden;
+    box-shadow: var(--sombra);
+    border: 1px solid #eee;
+}
+
+.map-container iframe {
+    display: block;
+    filter: grayscale(0.2); /* Un toque sutil de color profesional */
+}
+
+/* Ajuste para que el mapa no se vea tan alto en celulares pequeños */
+@media (max-width: 480px) {
+    .map-container iframe {
+        height: 250px;
+    }
+}
+/* CONTENEDOR DE REDES */
+.social-buttons-container {
+    display: flex;
+    flex-direction: column; /* Uno debajo del otro en móvil */
+    gap: 15px;
+    align-items: center;
+    margin-top: 15px;
+}
+
+/* BOTONES ALARGADOS */
+.btn-social-rect {
+    display: block;
+    width: 80%;            /* Ocupa el 80% del ancho en móvil */
+    max-width: 300px;      /* Pero no más de 300px */
+    padding: 12px 20px;
+    border-radius: 50px;   /* Bordes redondeados tipo píldora */
+    color: white !important;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Colores de fondo que rodean toda la palabra */
+.btn-social-rect.fb {
+    background-color: #1877F2; /* Facebook Blue */
+}
+
+.btn-social-rect.ig {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+/* Efecto al pasar el mouse o tocar */
+.btn-social-rect:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* Ajuste para PC: uno al lado del otro */
+@media (min-width: 768px) {
+    .social-buttons-container {
+        flex-direction: row;
+        justify-content: center;
+    }
+    .btn-social-rect {
+        width: 200px;
+    }
+}
+/* ESTILOS FUTURAS TRANSMISIONES */
+.future-broadcasts {
+    background: #ffffff;
+    border: 2px dashed var(--azul-claro); /* Borde punteado para indicar "en construcción" */
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.future-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.future-title h3 {
+    color: var(--azul);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Icono de punto palpitante */
+.pulse-icon {
+    width: 12px;
+    height: 12px;
+    background-color: var(--azul-claro);
+    border-radius: 50%;
+    animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 113, 202, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 113, 202, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 113, 202, 0); }
+}
+
+.future-grid {
+    display: grid;
+    gap: 15px;
+}
+
+.future-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #fcfcfc;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.future-icon {
+    font-size: 2rem;
+}
+
+.future-info h4 {
+    color: #444;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.future-info p {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 2px 0;
+}
+
+.status-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--azul-claro);
+    background: rgba(59, 113, 202, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Ajuste para escritorio */
+@media (min-width: 768px) {
+    .future-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
