@@ -1,33 +1,42 @@
-<!<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ministerio Aliento Desde El Cielo</title>
+    <title>Ministerio Aliento Desde El Cielo | Fe y Transformación</title>
+    
+    <meta name="description" content="Ministerio Aliento Desde El Cielo. Cuando la fe te impacta, eres transformado.">
+    
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
 </head>
 <body>
 
     <header class="navbar">
-        <div class="nav-container">
-            <div class="logo"><h2 class="logo-text">ALIENTO</h2></div>
+        <nav class="nav-container" aria-label="Navegación principal">
+            <div class="logo">
+                <h2 class="logo-text">ALIENTO</h2>
+            </div>
+            
             <div class="desktop-menu">
                 <a href="#inicio">Inicio</a>
                 <a href="#eventos">Eventos</a>
                 <a href="#programas">Programas</a>
                 <a href="#galeria">Galería</a>
+                <a href="#ubicacion">Contacto</a>
             </div>
-            <div class="menu-toggle" id="mobile-menu">
+
+            <button class="menu-toggle" id="mobile-menu" aria-label="Abrir menú">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
-            </div>
-        </div>
+            </button>
+        </nav>
     </header>
 
-    <nav class="nav-menu" id="nav-menu">
+    <nav class="nav-menu" id="nav-menu" aria-hidden="true">
         <a href="#inicio">Inicio</a>
         <a href="#eventos">Eventos</a>
         <a href="#programas">Programas</a>
@@ -44,63 +53,48 @@
         </section>
 
         <section class="container" id="eventos">
-            <h2 class="section-title">Próximos Eventos</h2>
+            <header class="section-header">
+                <h2 class="section-title">Próximos Eventos</h2>
+            </header>
+            
             <div class="eventos-lista">
-                <div class="card reveal">
+                <article class="card reveal">
                     <div class="card-img">
                         <span class="badge">28 FEB</span>
-                        <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=400">
+                        <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=400" alt="Jóvenes en campamento">
                     </div>
                     <div class="card-body">
                         <h3>Campamento Jóvenes</h3>
                         <p>📍 Lomas de San Isidro</p>
                     </div>
-                </div>
-                <div class="card reveal">
+                </article>
+
+                <article class="card reveal">
                     <div class="card-img">
                         <span class="badge">15 MAR</span>
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=400">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=400" alt="Reunión de mujeres">
                     </div>
                     <div class="card-body">
                         <h3>Reunión Mujeres</h3>
                         <p>📍 Auditorio Central</p>
                     </div>
+                </article>
+
                 </div>
-                <div class="card reveal">
-                    <div class="card-img">
-                        <span class="badge">22 MAR</span>
-                        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=400">
-                    </div>
-                    <div class="card-body">
-                        <h3>Noche de Alabanza</h3>
-                        <p>📍 Estadio Municipal</p>
-                    </div>
-                </div>
-                <div class="card reveal">
-                    <div class="card-img">
-                        <span class="badge">05 ABR</span>
-                        <img src="https://images.unsplash.com/photo-1510590337019-5ef8d3d32116?q=80&w=400">
-                    </div>
-                    <div class="card-body">
-                        <h3>Cena de Parejas</h3>
-                        <p>📍 Salón de Eventos</p>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <section class="container" id="programas">
             <div class="title-with-logo">
-                <img src="/conecta2imag.jpg" alt="Logo" class="section-logo">
+                <img src="/conecta2imag.jpg" alt="Logo Conecta2" class="section-logo">
                 <h2 class="section-title">Programas para todos</h2>
             </div>
 
             <div class="programas-columna">
                 <div class="program-item reveal prog-amarillo">
-                    <div class="program-logo-circular"><img src="generales.jpg" alt="Generales"></div>
+                    <div class="program-logo-circular"><img src="generales.jpg" alt="Generales de la fe"></div>
                     <div class="program-content">
-                        <h4>Generales de la fé</h4>
-                        <span class="schedule-tag">Jueves - 10:00 AM</span>
+                        <h4>Generales de la fe</h4>
+                        <time class="schedule-tag">Jueves - 10:00 AM</time>
                     </div>
                 </div>
 
@@ -108,122 +102,89 @@
                     <div class="program-logo-circular"><img src="mesa.jpg" alt="La Mesa"></div>
                     <div class="program-content">
                         <h4>La mesa servida</h4>
-                        <span class="schedule-tag">Jueves - 18:00 PM</span>
+                        <time class="schedule-tag">Jueves - 18:00 PM</time>
                     </div>
+                </div>
                 </div>
 
-                <div class="program-item reveal prog-azul">
-                    <div class="program-logo-circular"><img src="oidos.jpg" alt="Oidos"></div>
-                    <div class="program-content">
-                        <h4>Soy todo oídos</h4>
-                        <span class="schedule-tag">Jueves - 19:00 PM</span>
-                    </div>
-                </div>
-
-                <div class="program-item reveal prog-morado">
-                    <div class="program-logo-circular"><img src="fakenews.jpg" alt="Fake News"></div>
-                    <div class="program-content">
-                        <h4>Fake News</h4>
-                        <span class="schedule-tag">Jueves - 20:30 PM</span>
-                    </div>
-                </div>
-                <div class="program-item reveal prog-azul">
-                    <div class="program-logo-circular"><img src="/imag/Desvelados.png" alt="Oidos"></div>
-                    <div class="program-content">
-                        <h4>Desvelados</h4>
-                        <span class="schedule-tag">Jueves - 19:00 PM</span>
-                    </div>
-                </div>
-            </div>
             <div class="future-broadcasts reveal">
-    <div class="future-title">
-        <span class="pulse-icon"></span>
-        <h3>Próximamente en Medios</h3>
-    </div>
-
-    <div class="future-grid">
-        <div class="future-item">
-            <div class="future-icon">📻</div>
-            <div class="future-info">
-                <h4>Frecuencia de Bendición</h4>
-                <p>Transmisión Radial FM</p>
-                <span class="status-tag">En preparación</span>
+                <div class="future-title">
+                    <span class="pulse-icon"></span>
+                    <h3>Próximamente en Medios</h3>
+                </div>
+                <div class="future-grid">
+                    <div class="future-item">
+                        <span class="future-icon" aria-hidden="true">📻</span>
+                        <div class="future-info">
+                            <h4>Frecuencia de Bendición</h4>
+                            <p>Transmisión Radial FM</p>
+                            <span class="status-tag">En preparación</span>
+                        </div>
+                    </div>
+                    <div class="future-item">
+                        <span class="future-icon" aria-hidden="true">📺</span>
+                        <div class="future-info">
+                            <h4>Aliento TV</h4>
+                            <p>Canal Digital Cristiano</p>
+                            <span class="status-tag">Muy pronto</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="future-item">
-            <div class="future-icon">📺</div>
-            <div class="future-info">
-                <h4>Aliento TV</h4>
-                <p>Canal Digital Cristiano</p>
-                <span class="status-tag">Muy pronto</span>
-            </div>
-        </div>
-    </div>
-</div>
 
             <div class="social-section-programas">
-    <p>Siguenos en nuestras redes:</p>
-   <div class="social-section-programas">
-    <div class="social-buttons-container">
-        <a href="https://facebook.com/tu-pagina" class="btn-social-rect fb" target="_blank">
-            Facebook
-        </a>
-        <a href="https://instagram.com/tu-perfil" class="btn-social-rect ig" target="_blank">
-            Instagram
-        </a>
-    </div>
-</div>
-</div>
-
-
+                <p>Síguenos en nuestras redes:</p>
+                <div class="social-buttons-container">
+                    <a href="https://facebook.com/tu-pagina" class="btn-social-rect fb" target="_blank" rel="noopener">Facebook</a>
+                    <a href="https://instagram.com/tu-perfil" class="btn-social-rect ig" target="_blank" rel="noopener">Instagram</a>
+                </div>
+            </div>
         </section>
 
         <section class="container" id="galeria">
             <h2 class="section-title">Galería</h2>
             <div class="galeria-carousel" id="galeria-carrusel">
-                <div class="foto-card"><img src="https://images.unsplash.com/photo-1510590337019-5ef8d3d32116?q=80&w=400"></div>
-                <div class="foto-card"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=400"></div>
-                <div class="foto-card"><img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=400"></div>
+                <div class="foto-card"><img src="https://images.unsplash.com/photo-1510590337019-5ef8d3d32116?q=80&w=400" alt="Momento de oración"></div>
+                <div class="foto-card"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=400" alt="Evento de alabanza"></div>
+                <div class="foto-card"><img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=400" alt="Jóvenes compartiendo"></div>
             </div>
         </section>
     </main>
 
     <footer class="footer">
         <section class="container reveal" id="ubicacion">
-    <div class="info-card-blue">
-        <div class="info-item">
-            <span class="info-icon">📍</span>
-            <div>
-                <h4>Nuestra Ubicación</h4>
-                <p>Calle Ficticia 123, Las Piedras, Canelones</p>
+            <div class="info-card-blue">
+                <address class="info-item">
+                    <span class="info-icon">📍</span>
+                    <div>
+                        <h4>Nuestra Ubicación</h4>
+                        <p>Calle Ficticia 123, Las Piedras, Canelones</p>
+                    </div>
+                </address>
+                <div class="info-item">
+                    <span class="info-icon">⏰</span>
+                    <div>
+                        <h4>Horarios de Reunión</h4>
+                        <p>Domingos 10:00 AM / Miércoles 19:30 PM</p>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="info-item">
-            <span class="info-icon">⏰</span>
-            <div>
-                <h4>Horarios de Reunión</h4>
-                <p>Domingos 10:00 AM / Miércoles 19:30 PM</p>
-            </div>
-        </div>
-    </div>
 
-    <div class="map-container">
-        <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13123.456789!2d-56.22!3d-34.73!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDQzJzQ4LjAiUyA1NsKwMTMnMTIuMCJX!5e0!3m2!1ses!2suy!4v123456789" 
-            width="100%" 
-            height="350" 
-            style="border:0;" 
-            allowfullscreen="" 
-            loading="lazy" 
-            referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-    </div>
-</section>
+            <div class="map-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3278.435!2d-56.216!3d-34.666!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDM5JzU3LjYiUyA1NsKwMTInNTcuNiJX!5e0!3m2!1ses!2suy!4v1700000000000" 
+                    width="100%" 
+                    height="350" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
+            </div>
+        </section>
     </footer>
 
-    <a href="https://wa.me/tu-numero" class="wa-float">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="30">
+    <a href="https://wa.me/tu-numero" class="wa-float" aria-label="Contactar por WhatsApp">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="30">
     </a>
 
     <script src="script.js"></script>
